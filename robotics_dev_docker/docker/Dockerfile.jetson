@@ -51,21 +51,21 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # install pylon
-RUN if [ "$(uname -m)" = "x86_64" ]; then \
-    wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylon_7_4_0_14900_linux_x86_64_debs.tar.gz \
-    && mkdir pylon \
-    && tar -xzf pylon_*.tar.gz -C pylon \
-    && apt-get install -y ./pylon/pylon_*.deb ./pylon/codemeter_*.deb \
-    && rm -rf pylon pylon_*.tar.gz; \
-    else \
-    wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylon_7_4_0_14900_linux_aarch64_debs.tar.gz \
-    && mkdir pylon \
-    && tar -xzf pylon_*.tar.gz -C pylon \
-    && apt-get install -y ./pylon/pylon_*.deb ./pylon/codemeter-lite_*.deb \
-    && rm -rf pylon pylon_*.tar.gz; \
-    fi
+# RUN if [ "$(uname -m)" = "x86_64" ]; then \
+#     wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylon_7_4_0_14900_linux_x86_64_debs.tar.gz \
+#     && mkdir pylon \
+#     && tar -xzf pylon_*.tar.gz -C pylon \
+#     && apt-get install -y ./pylon/pylon_*.deb ./pylon/codemeter_*.deb \
+#     && rm -rf pylon pylon_*.tar.gz; \
+#     else \
+#     wget https://www2.baslerweb.com/media/downloads/software/pylon_software/pylon_7_4_0_14900_linux_aarch64_debs.tar.gz \
+#     && mkdir pylon \
+#     && tar -xzf pylon_*.tar.gz -C pylon \
+#     && apt-get install -y ./pylon/pylon_*.deb ./pylon/codemeter-lite_*.deb \
+#     && rm -rf pylon pylon_*.tar.gz; \
+#     fi
 
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/pylon/lib/
+# ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/pylon/lib/
 
 # copy entrypoint scripts
 RUN mkdir -p /usr/local/bin/scripts
