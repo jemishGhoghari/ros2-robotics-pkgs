@@ -3,7 +3,9 @@
 ## Installation
 
 ### Build isaac_ros_common docker image
+
 1. Install docker
+
 ```
 # Add Docker's official GPG key:
 sudo apt-get update
@@ -24,27 +26,31 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 ```
 
 2. Install git-lfs
+
 ```
 sudo apt-get install git-lfs
 git lfs install --skip-repo
 ```
 
 3. On x86_64 platforms:
-    - Install the nvidia-container-toolkit using the [instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt).
-    - Configure nvidia-container-toolkit for Docker using the [instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-docker).
 
+   - Install the nvidia-container-toolkit using the [instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-with-apt).
+   - Configure nvidia-container-toolkit for Docker using the [instructions](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#configuring-docker).
 4. Setup isaac_ros-dev workspace
+
 ```
 mkdir -p ~/workspaces/isaac_ros-dev/src
 cd ~/workspaces/isaac_ros-dev/src
 git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git
 git clone git@github.com:SchanzerRacing/srd_acu_docker.git -b develop
-cp srd_acu_docker/scripts/.isaac_ros_common-config isaac_ros_common/scripts
+cp ros2-robotics-pkgs/robotics_dev_docker/scripts/.isaac_ros_common-config isaac_ros_common/scripts
 isaac_ros_common/scripts/run_dev.sh $HOME/workspaces/isaac_ros-dev/
 ```
 
 ### Setup automatic host configuration on startup
+
 1. Setup can service
+
 ```
 cd ~/workspaces/isaac_ros-dev/src/srd_acu_docker/startup
 sudo cp srd_can_startup.sh /usr/local/bin/
@@ -54,6 +60,7 @@ sudo systemctl enable srd-can-startup.service
 ```
 
 2. Setup docker autostart service
+
 ```
 mkdir -p ~/.config/systemd/user/
 cd ~/workspaces/isaac_ros-dev/src/srd_acu_docker/startup
