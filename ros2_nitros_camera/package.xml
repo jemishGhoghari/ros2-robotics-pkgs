@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>ros2_nitros_camera</name>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="jemishghoghari50@gmail.com">Jemish Ghoghari</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>isaac_ros_nitros</depend>
+  <depend>isaac_ros_managed_nitros</depend>
+  <depend>isaac_ros_nitros_image_type</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_components</depend>
+  <depend>OpenCV</depend>
+  <depend>isaac_ros_common</depend>
+  <depend>std_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
