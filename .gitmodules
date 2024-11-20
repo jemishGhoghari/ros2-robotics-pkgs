@@ -1,3 +1,1 @@
-[submodule "ros2_usb_camera"]
-	path = ros2_usb_camera
-	url = https://github.com/klintan/ros2_usb_camera.git
+
