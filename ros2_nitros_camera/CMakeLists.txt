@@ -19,11 +19,14 @@ find_package(ament_cmake REQUIRED)
 find_package(isaac_ros_nitros REQUIRED)
 find_package(isaac_ros_managed_nitros REQUIRED)
 find_package(isaac_ros_nitros_image_type REQUIRED)
+find_package(isaac_ros_nitros_camera_info_type REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(isaac_ros_common REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(camera_calibration_parsers REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED
   src/ros2_nitros_camera.cpp
@@ -35,9 +38,12 @@ ament_target_dependencies(${PROJECT_NAME}
   "isaac_ros_nitros"
   "isaac_ros_managed_nitros"
   "isaac_ros_nitros_image_type"
+  "isaac_ros_nitros_camera_info_type"
   "isaac_ros_common"
   "OpenCV"
   "std_msgs"
+  "sensor_msgs"
+  "camera_calibration_parsers"
 )
 
 rclcpp_components_register_nodes(${PROJECT_NAME} "ros2_nitros_camera::NitrosCameraNode")
@@ -57,6 +63,12 @@ install(TARGETS
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY
+  launch
+  calibration_config
+  DESTINATION share/${PROJECT_NAME}
 )
 
 if(BUILD_TESTING)

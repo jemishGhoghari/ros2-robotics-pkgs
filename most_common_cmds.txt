@@ -1,0 +1,16 @@
+ros2 launch isaac_ros_yolov8 yolov8_tensor_rt.launch.py model_file_path:=/workspaces/isaac_ros-dev/src/ros2-robotics-pkgs/isaac_ros_object_detection/isaac_ros_yolov8/weights/best.onnx engine_file_path:=/workspaces/isaac_ros-dev/src/ros2-robotics-pkgs/isaac_ros_object_detection/isaac_ros_yolov8/weights/150_epochs.engine input_binding_names:=["images"] output_binding_names:=["output0"] network_image_width:=640 network_image_height:=640 image_mean:=[0.378671] image_stddev:=[0.31522] confidence_threshold:=0.25 nms_threshold:=0.45 input_image_width:=640 input_image_height:=640
+
+ros2 launch isaac_ros_yolov8 yolov8_tensor_rt.launch.py model_file_path:=/workspaces/isaac_ros-dev/yolo_weights/3k_8kp_flip_1280_800_area50_scratch_bs2.onnx engine_file_path:=/workspaces/isaac_ros-dev/yolo_weights/syn_1280_800_bs2.engine input_binding_names:=["images"] output_binding_names:=["output0"] network_image_width:=1280 network_image_height:=800 image_mean:=[0.378671] image_stddev:=[0.31522] confidence_threshold:=0.25 nms_threshold:=0.45 input_image_width:=1280 input_image_height:=800
+
+Run this:
+ros2 launch isaac_ros_yolov8 yolov8_tensor_rt.launch.py model_file_path:=/workspaces/isaac_ros-dev/yolo_weights/5k_finetune_1280_res1280_bs1.onnx engine_file_path:=/workspaces/isaac_ros-dev/yolo_weights/1280_800.engine input_binding_names:=["images"] output_binding_names:=["output0"] network_image_width:=800 network_image_height:=1280 image_mean:=[0.378671] image_stddev:=[0.31522] confidence_threshold:=0.25 nms_threshold:=0.45 input_image_width:=800 input_image_height:=1280
+
+First download rosbag and Play:
+ros2 bag play -l src/rosbags/rosbag_14_05_full_perception_new_0-001.db3 --remap /srd_perception/left_image/image_raw:=/image
+
+Convert to TensorRT engine:
+/usr/src/tensorrt/bin/trtexec \
+--onnx=best.onnx \
+--saveEngine=best.engine --fp16
+
+ros2 launch isaac_ros_yolov8 yolov8_tensor_rt.launch.py model_file_path:=/workspaces/isaac_ros-dev/yolo_weights/weight_1000_yolov11s/best.onnx engine_file_path:=/workspaces/isaac_ros-dev/yolo_weights/weight_1000_yolov11s/best.engine input_binding_names:=["images"] output_binding_names:=["output0"] network_image_width:=640 network_image_height:=640 image_mean:=[0.378671] image_stddev:=[0.31522] confidence_threshold:=0.25 nms_threshold:=0.45 input_image_width:=640 input_image_height:=640
