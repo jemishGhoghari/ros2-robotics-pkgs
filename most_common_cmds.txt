@@ -14,3 +14,5 @@ Convert to TensorRT engine:
 --saveEngine=best.engine --fp16
 
 ros2 launch isaac_ros_yolov8 yolov8_tensor_rt.launch.py model_file_path:=/workspaces/isaac_ros-dev/yolo_weights/weight_1000_yolov11s/best.onnx engine_file_path:=/workspaces/isaac_ros-dev/yolo_weights/weight_1000_yolov11s/best.engine input_binding_names:=["images"] output_binding_names:=["output0"] network_image_width:=640 network_image_height:=640 image_mean:=[0.378671] image_stddev:=[0.31522] confidence_threshold:=0.25 nms_threshold:=0.45 input_image_width:=640 input_image_height:=640
+
+ros2 launch isaac_ros_yolov8 yolov8_tensor_rt.launch.py model_file_path:=/workspaces/isaac_ros-dev/src/yolo_weights/best.onnx engine_file_path:=/workspaces/isaac_ros-dev/src/yolo_weights/best.engine input_binding_names:=["images"] output_binding_names:=["output0"] network_image_width:=640 network_image_height:=640 image_mean:=[0.378671] image_stddev:=[0.31522] confidence_threshold:=0.25 nms_threshold:=0.45 input_image_width:=640 input_image_height:=640
