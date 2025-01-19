@@ -14,18 +14,18 @@ def generate_launch_description():
         name='ros2_nitros_camera_node',
         parameters=[
             {"camera_id" : 0},
-            {"camera_fps" : 60},
+            {"camera_fps" : 30},
             {"image_width" : 640},
             {"image_height" : 640},	
-            {"frame_id" : "camera"},
+            {"frame_id" : "narrow_stereo"},
             {"from_video_file" : False},
             {"video_file_path" : "src/ros2-robotics-pkgs/ros2_nitros_camera/sample_video/Test_Video.mp4"},
-            {"camera_calibration_file" : "src/ros2-robotics-pkgs/ros2_nitros_camera/calibration_config/camera_calibration.yaml"}
+            {"camera_calibration_file" : "src/ros2-robotics-pkgs/ros2_nitros_camera/calibration_config/basler_camera_calibration.yaml"}
         ]
     )
 
     container = ComposableNodeContainer(
-        name='tensor_rt_container',
+        name='camera_container',
         namespace='',
         package='rclcpp_components',
         executable='component_container_mt',

@@ -22,7 +22,7 @@ NitrosCameraNode::NitrosCameraNode(const rclcpp::NodeOptions &node_options) : No
     camera_calibration_file_ = this->get_parameter("camera_calibration_file").get_parameter_value().get<std::string>();
 
     camera_pub_ = std::make_shared<nvidia::isaac_ros::nitros::ManagedNitrosPublisher<nvidia::isaac_ros::nitros::NitrosImage>>(
-            this, "/image",
+            this, "/image_fake",
             nvidia::isaac_ros::nitros::nitros_image_rgb8_t::supported_type_name,
             nvidia::isaac_ros::nitros::NitrosStatisticsConfig(),
             output_qos
@@ -54,7 +54,7 @@ NitrosCameraNode::NitrosCameraNode(const rclcpp::NodeOptions &node_options) : No
 
     timer_ = this->create_wall_timer(
         std::chrono::milliseconds(static_cast<int>(1000.0 / camera_fps)),
-        std::bind(&NitrosCameraNode::buildImageAndPublish, this)
+        std::bind(&NitrosCameraNode::buildCameraInfo, this)
     );
 }
 

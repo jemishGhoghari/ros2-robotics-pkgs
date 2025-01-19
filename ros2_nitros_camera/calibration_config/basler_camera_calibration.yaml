@@ -1,12 +1,26 @@
-image_width: 1280
-image_height: 800
-camera_name: basler
+image_width: 1936
+image_height: 1216
+camera_name: narrow_stereo
 camera_matrix:
   rows: 3
   cols: 3
-  data: [1193.594970703125, 0.0, 639.5, 0.0, 1193.594970703125, 399.5, 0.0, 0.0, 1.0] # [1.90622215e+03, 0.0, 1.07014675e+03, 0, 1.89979492e+03,  6.86326202e+02, 0, 0, 1]
+  data: [1759.64076,    0.     ,  983.17958,
+            0.     , 1749.21833,  571.52395,
+            0.     ,    0.     ,    1.     ]
 distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
   cols: 5
-  data: [0.00092899, -0.00577208, -0.00034276, -0.00020454, 0.01153354]
+  data: [-0.269418, 0.137217, 0.001073, 0.000562, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1., 0., 0.,
+         0., 1., 0.,
+         0., 0., 1.]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [1620.25903,    0.     ,  986.21108,    0.     ,
+            0.     , 1690.62024,  569.40933,    0.     ,
+            0.     ,    0.     ,    1.     ,    0.     ]
