@@ -24,14 +24,14 @@ NitrosCameraNode::NitrosCameraNode(const rclcpp::NodeOptions &node_options) : No
     camera_pub_ = std::make_shared<nvidia::isaac_ros::nitros::ManagedNitrosPublisher<nvidia::isaac_ros::nitros::NitrosImage>>(
             this, "/image_fake",
             nvidia::isaac_ros::nitros::nitros_image_rgb8_t::supported_type_name,
-            nvidia::isaac_ros::nitros::NitrosStatisticsConfig(),
+            nvidia::isaac_ros::nitros::NitrosDiagnosticsConfig(),
             output_qos
         ); // Right Camera
 
     camera_info_publisher_ = std::make_shared<nvidia::isaac_ros::nitros::ManagedNitrosPublisher<nvidia::isaac_ros::nitros::NitrosCameraInfo>>(
             this, "camera_info",
             nvidia::isaac_ros::nitros::nitros_camera_info_t::supported_type_name,
-            nvidia::isaac_ros::nitros::NitrosStatisticsConfig(),
+            nvidia::isaac_ros::nitros::NitrosDiagnosticsConfig(),
             output_qos
         );
 
