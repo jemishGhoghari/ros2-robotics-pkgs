@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>ros2_gazebo_simulation</name>
+  <name>4wd_robots_examples</name>
   <version>0.0.1</version>
   <description>ROS2 Gazebo Simulation Package</description>
   <maintainer email="jemishghoghari50@gmail.com">Jemish Ghoghari</maintainer>

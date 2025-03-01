@@ -27,16 +27,16 @@ def generate_launch_description():
     use_sim_time = True
 
     world_path = PathJoinSubstitution(
-        [FindPackageShare("ros2_gazebo_simulation"), "worlds", "gas_station.world"]
+        [FindPackageShare("4wd_robots_examples"), "worlds", "gas_station.world"]
     )
 
     robot_base = '4wd'
     urdf_path = PathJoinSubstitution(
-        [FindPackageShare("ros2_gazebo_simulation"), "urdf/robots", f"{robot_base}.urdf.xacro"]
+        [FindPackageShare("4wd_robots_examples"), "urdf/robots", f"{robot_base}.urdf.xacro"]
     )
 
     description_launch_path = PathJoinSubstitution(
-        [FindPackageShare('ros2_gazebo_simulation'), 'launch', 'description.launch.py']
+        [FindPackageShare('4wd_robots_examples'), 'launch', 'description.launch.py']
     )
 
     return LaunchDescription([

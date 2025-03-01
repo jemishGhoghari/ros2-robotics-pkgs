@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 from glob import glob
 
-package_name = 'ros2_gazebo_simulation'
+package_name = '4wd_robots_examples'
 
 setup(
     name=package_name,

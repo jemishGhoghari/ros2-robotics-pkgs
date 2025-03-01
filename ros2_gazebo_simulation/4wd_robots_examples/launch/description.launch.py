@@ -25,11 +25,11 @@ def generate_launch_description():
     robot_base = '4wd'
 
     urdf_path = PathJoinSubstitution(
-        [FindPackageShare("ros2_gazebo_simulation"), "urdf/robots", f"{robot_base}.urdf.xacro"]
+        [FindPackageShare("4wd_robots_examples"), "urdf/robots", f"{robot_base}.urdf.xacro"]
     )
 
     rviz_config_path = PathJoinSubstitution(
-        [FindPackageShare('ros2_gazebo_simulation'), 'rviz', 'description.rviz']
+        [FindPackageShare('4wd_robots_examples'), 'rviz', 'description.rviz']
     )
 
     return LaunchDescription([
