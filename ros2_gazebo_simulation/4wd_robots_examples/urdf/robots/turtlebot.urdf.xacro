@@ -15,13 +15,13 @@
   <xacro:property name="front_caster_wheel" value="true" />
   <xacro:property name="rear_caster_wheel" value="true" />
 
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/mech/base.urdf.xacro" />
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/mech/wheel.urdf.xacro" />
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/mech/caster_wheel.urdf.xacro" />
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/imu.urdf.xacro" />
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/generic_laser.urdf.xacro" />
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/depth_sensor.urdf.xacro" />
-  <xacro:include filename="$(find 4wd_robots_examples)/urdf/controllers/diff_drive.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/mech/wheel.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/mech/caster_wheel.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/imu.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/generic_laser.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/depth_sensor.urdf.xacro" />
+  <xacro:include filename="$(find linorobot2_description)/urdf/controllers/diff_drive.urdf.xacro" />
 
   <xacro:property name="laser_pose">
     <origin xyz="0.055 0.02 0.41" rpy="0 0 0"/>

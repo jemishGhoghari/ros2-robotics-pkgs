@@ -94,7 +94,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '-topic', 'robot_description', 
-                '-entity', '4wd', 
+                '-entity', 'linorobot2_2wd', 
                 '-x', LaunchConfiguration('spawn_x'),
                 '-y', LaunchConfiguration('spawn_y'),
                 '-z', LaunchConfiguration('spawn_z'),
