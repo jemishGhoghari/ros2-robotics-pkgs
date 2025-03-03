@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <robot name="linorobot2_2wd" xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find linorobot2_description)/urdf/mecanum_properties.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/mech/base.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/mech/mecanum_wheel.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/imu.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/generic_laser.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/depth_sensor.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/sensors/camera.urdf.xacro" />
-  <xacro:include filename="$(find linorobot2_description)/urdf/controllers/omni_drive.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/mecanum_properties.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/mech/base.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/mech/mecanum_wheel.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/imu.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/generic_laser.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/depth_sensor.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/sensors/camera.urdf.xacro" />
+  <xacro:include filename="$(find 4wd_robots_examples)/urdf/controllers/omni_drive.urdf.xacro" />
 
   <xacro:base 
     length="${base_length}" 
