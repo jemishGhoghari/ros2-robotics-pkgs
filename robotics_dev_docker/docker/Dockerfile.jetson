@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     ros-humble-can-msgs \
     ros-humble-gazebo-ros-pkgs \
     ros-humble-gazebo-ros2-control \
+    ros-humble-gazebo-ros \
     ros-humble-topic-tools \
     ros-humble-ros2-socketcan \
     ros-humble-ros2-control \   
