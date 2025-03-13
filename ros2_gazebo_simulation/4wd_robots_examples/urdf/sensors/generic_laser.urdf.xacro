@@ -4,12 +4,12 @@
 
   <xacro:macro name="generic_laser" params="*origin">
     <xacro:laser
-      update_rate="10"
+      update_rate="30"
       ray_count="360"
-      min_angle="-3.1416"
-      max_angle="3.1416"
+      min_angle="-94.248"
+      max_angle="94.248"
       min_range="0.08"
-      max_range="12.0"
+      max_range="80.0"
       frame_id="laser"
       topic_name="scan"
     >
@@ -19,7 +19,7 @@
 
   <xacro:macro name="generic_base_laser" params="*origin">
     <xacro:laser
-      update_rate="10"
+      update_rate="30"
       ray_count="360"
       min_angle="-3.1416"
       max_angle="3.1416"
