@@ -16,6 +16,7 @@
 #include <nav_msgs/msg/path.hpp>
 #include <visualization_msgs/msg/marker.hpp>
 #include <geometry_msgs/msg/point.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
 
 using namespace std::chrono_literals;
 using namespace std::placeholders;
@@ -35,13 +36,14 @@ static auto MakeMap(const std::string &opendrive_content) {
 class OpenDriveMapParser : public rclcpp::Node
 {   
 private:
-    std::string map_content; // path to OpenDRIVE XML file
     std::shared_ptr<carla::road::Map> _map;
     carla::geom::Location origin;
     carla::geom::Location destination;
 
     // rclcpp::Publisher<nav_msgs::msg::Path>::SharedPtr path_publisher_;
     rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_publisher_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr origin_pose_;
+    rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr destination_pose_;
     rclcpp::TimerBase::SharedPtr timer_;
 
 public:

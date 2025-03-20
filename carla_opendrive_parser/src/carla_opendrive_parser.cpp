@@ -8,17 +8,12 @@ OpenDriveMapParser::OpenDriveMapParser(const rclcpp::NodeOptions &node_options) 
     RCLCPP_INFO(this->get_logger(), "OpenDrive Map Parser Node Started.");
 
     this->declare_parameter("map_content", "/workspaces/isaac_ros-dev/src/ros2-robotics-pkgs/carla_opendrive_parser/maps/CARISSMA_rural.xml");
-    this->declare_parameter("origin", rclcpp::PARAMETER_DOUBLE_ARRAY);
-    this->declare_parameter("destination", rclcpp::PARAMETER_DOUBLE_ARRAY); 
-    map_content = this->get_parameter("map_content").get_parameter_value().get<std::string>();
-
-    this->set_parameter(rclcpp::Parameter("origin", std::vector<double>{-171.71f, -122.36f, -0.64f}));
-    this->set_parameter(rclcpp::Parameter("destination", std::vector<double>{5.91f, -3.52f, -0.70f}));
-
-    std::vector<double> origin_param;
-    this->get_parameter("origin", origin_param);
-    std::vector<double> destination_param;
-    this->get_parameter("destination", destination_param);
+    this->declare_parameter<std::vector<double>>("origin", {-171.71f, -122.36f, -0.64f});
+    this->declare_parameter<std::vector<double>>("destination", {5.91f, -3.52f, -0.70f});
+    
+    std::string map_content = this->get_parameter("map_content").as_string();
+    std::vector<double> origin_param = this->get_parameter("origin").as_double_array();
+    std::vector<double> destination_param = this->get_parameter("destination").as_double_array();
 
     origin.x = origin_param[0];
     origin.y = origin_param[1];
@@ -31,6 +26,8 @@ OpenDriveMapParser::OpenDriveMapParser(const rclcpp::NodeOptions &node_options) 
     _map = std::make_shared<carla::road::Map>(MakeMap(map_content));
 
     marker_publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("/waypoints_marker", 50);
+    origin_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("origin", 50);
+    destination_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("destination", 50);
 
     timer_ = this->create_wall_timer(
         0.5ms,
@@ -71,10 +68,42 @@ void OpenDriveMapParser::path_planner() {
     }
 
     // Ensure the goal waypoint is included
-    path.push_back(goal_waypoint);
+    path.push_back(goal_waypoint);  
 
     visualization_msgs::msg::Marker waypoints_marker = get_waypoints_marker(path, {0.0f, 1.0f, 0.0f}, 0.2, 0.5);
 
+    // Puslish Origin Pose for Visualization
+    geometry_msgs::msg::PoseStamped origin_pose_msg;
+    origin_pose_msg.header.stamp = this->now();
+    origin_pose_msg.header.frame_id = "map";
+    carla::geom::Transform transform_opt_origin = _map->ComputeTransform(path.front());
+    auto loc_start = transform_opt_origin.location;
+    origin_pose_msg.pose.position.x = loc_start.x;
+    origin_pose_msg.pose.position.y = loc_start.y;
+    origin_pose_msg.pose.position.z = loc_start.z;
+
+    origin_pose_msg.pose.orientation.x = 0.0;
+    origin_pose_msg.pose.orientation.y = 0.0;
+    origin_pose_msg.pose.orientation.z = 0.0;
+    origin_pose_msg.pose.orientation.w = 1.0;
+
+    // Publish Destination Pose for Visualization
+    geometry_msgs::msg::PoseStamped destination_pose_msg;
+    destination_pose_msg.header.stamp = this->now();
+    destination_pose_msg.header.frame_id = "map";
+    carla::geom::Transform transform_opt_destination = _map->ComputeTransform(path.back());
+    auto loc_end = transform_opt_destination.location;
+    destination_pose_msg.pose.position.x = loc_end.x;
+    destination_pose_msg.pose.position.y = loc_end.y;
+    destination_pose_msg.pose.position.z = loc_end.z;
+
+    destination_pose_msg.pose.orientation.x = 0.0;
+    destination_pose_msg.pose.orientation.y = 0.0;
+    destination_pose_msg.pose.orientation.z = 0.0;
+    destination_pose_msg.pose.orientation.w = 1.0;
+
+    origin_pose_->publish(origin_pose_msg);
+    destination_pose_->publish(destination_pose_msg);
     marker_publisher_->publish(waypoints_marker);
 }
 
