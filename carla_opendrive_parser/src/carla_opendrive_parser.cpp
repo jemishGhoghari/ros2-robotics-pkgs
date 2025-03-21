@@ -8,8 +8,8 @@ OpenDriveMapParser::OpenDriveMapParser(const rclcpp::NodeOptions &node_options) 
     RCLCPP_INFO(this->get_logger(), "OpenDrive Map Parser Node Started.");
 
     this->declare_parameter("map_content", "/workspaces/isaac_ros-dev/src/ros2-robotics-pkgs/carla_opendrive_parser/maps/CARISSMA_rural.xml");
-    this->declare_parameter<std::vector<double>>("origin", {-171.71f, -122.36f, -0.64f});
-    this->declare_parameter<std::vector<double>>("destination", {5.91f, -3.52f, -0.70f});
+    this->declare_parameter<std::vector<double>>("origin", {-171.71f, 122.36f, -0.64f});
+    this->declare_parameter<std::vector<double>>("destination", {20.84f, 66.99f, -0.41f});
     
     std::string map_content = this->get_parameter("map_content").as_string();
     std::vector<double> origin_param = this->get_parameter("origin").as_double_array();
@@ -25,50 +25,110 @@ OpenDriveMapParser::OpenDriveMapParser(const rclcpp::NodeOptions &node_options) 
 
     _map = std::make_shared<carla::road::Map>(MakeMap(map_content));
 
-    marker_publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("/waypoints_marker", 50);
-    origin_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("origin", 50);
-    destination_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("destination", 50);
+    marker_publisher_ = this->create_publisher<visualization_msgs::msg::Marker>("/waypoints_marker", 100);
+    origin_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("origin", 100);
+    destination_pose_ = this->create_publisher<geometry_msgs::msg::PoseStamped>("destination", 100);
 
     timer_ = this->create_wall_timer(
-        0.5ms,
+        0.1ms,
         std::bind(&OpenDriveMapParser::path_planner, this));
+}
+
+std::vector<carla::road::element::Waypoint> OpenDriveMapParser::AStarPathPlanning(const carla::road::element::Waypoint &start, const carla::road::element::Waypoint &goal) {
+    std::vector<carla::road::element::Waypoint> path;
+    std::priority_queue<AStarNode, std::vector<AStarNode>, std::greater<AStarNode>> open_set;
+    std::unordered_map<std::string, double> g_score;
+    std::unordered_map<std::string, carla::road::element::Waypoint> came_from;
+
+    auto waypoint_hash = [](const carla::road::element::Waypoint &wp) {
+        return std::to_string(wp.road_id) + "_" + std::to_string(wp.section_id) +
+               "_" + std::to_string(wp.lane_id) + "_" + std::to_string(static_cast<int>(wp.s * 10));
+    };
+
+    open_set.push({start, Heuristic(start, goal), 0.0});
+    g_score[waypoint_hash(start)] = 0.0;
+
+    while (!open_set.empty()) {
+        AStarNode current = open_set.top();
+        open_set.pop();
+
+        if (current.waypoint.road_id == goal.road_id && std::abs(current.waypoint.s - goal.s) < 1.0) {
+            // Reconstruct path
+            carla::road::element::Waypoint trace = current.waypoint;
+            while (came_from.find(waypoint_hash(trace)) != came_from.end()) {
+                path.push_back(trace);
+                trace = came_from[waypoint_hash(trace)];
+            }
+            path.push_back(start);
+            std::reverse(path.begin(), path.end());
+            return path;
+        }
+
+        std::vector<carla::road::element::Waypoint> neighbors = _map->GetNext(current.waypoint, 2.0);
+
+        for (const auto &neighbor : neighbors) {
+            double tentative_g_score = current.g_cost + Heuristic(current.waypoint, neighbor);
+            std::string neighbor_key = waypoint_hash(neighbor);
+
+            if (g_score.find(neighbor_key) == g_score.end() || tentative_g_score < g_score[neighbor_key]) {
+                g_score[neighbor_key] = tentative_g_score;
+                came_from[neighbor_key] = current.waypoint;
+
+                double f_score = tentative_g_score + Heuristic(neighbor, goal);
+                open_set.push({neighbor, f_score, tentative_g_score});
+            }
+        }
+    }
+
+    std::cerr << "Error: No valid path found using A*!" << std::endl;
+    return path;
 }
 
 void OpenDriveMapParser::path_planner() {
     std::vector<carla::road::element::Waypoint> path;
 
-    boost::optional<carla::road::element::Waypoint> road_projected_waypoint_start = _map->GetClosestWaypointOnRoad(origin, static_cast<int32_t>(carla::road::Lane::LaneType::Driving));
-    boost::optional<carla::road::element::Waypoint> road_projected_waypoint_end = _map->GetClosestWaypointOnRoad(destination, static_cast<int32_t>(carla::road::Lane::LaneType::Driving));
+    // Find start and goal waypoints
+    auto start_opt = _map->GetClosestWaypointOnRoad(origin, static_cast<int32_t>(carla::road::Lane::LaneType::Driving));
+    auto goal_opt  = _map->GetClosestWaypointOnRoad(destination, static_cast<int32_t>(carla::road::Lane::LaneType::Driving));
 
-    if (!road_projected_waypoint_start) {
-        std::cerr << "Error: Could not find a valid waypoint for the origin location!" << std::endl;
+    if (!start_opt || !goal_opt) {
+        std::cerr << "Error: Could not find valid waypoints for origin or destination." << std::endl;
     }
 
-    if (!road_projected_waypoint_end) {
-        std::cerr << "Error: Could not find a valid waypoint for the destination location!" << std::endl;
-    }
+    // path = AStarPathPlanning(*start_opt, *goal_opt);
 
-    carla::road::element::Waypoint start_waypoint = *road_projected_waypoint_start;
-    carla::road::element::Waypoint goal_waypoint = *road_projected_waypoint_end;
+    carla::road::element::Waypoint current = *start_opt;
+    carla::road::element::Waypoint goal = *goal_opt;
 
-    // Start path generation
-    auto current_waypoint = start_waypoint;
-    while (std::abs(current_waypoint.s - goal_waypoint.s) > 0.1) {
-        path.push_back(current_waypoint);
-        
-        // Get next waypoints along the lane
-        auto next_waypoints = _map->GetNext(current_waypoint, 1.0);  // Step size of 2 meters
+    const auto goal_transform = _map->ComputeTransform(current);
 
-        if (!next_waypoints.empty()) {
-            current_waypoint = next_waypoints.front();  // Choose the first available waypoint
-        } else {
+    while (true) {
+        path.push_back(current);
+
+        // const auto current_transform = _map->ComputeTransform(current);
+
+        // const double euclidean_distance = carla::geom::Math::Distance2D(current_transform.location, goal_transform.location);
+
+        // Stop condition: if same road & close enough
+        if (current.road_id == goal.road_id && std::abs(current.s - goal.s) < 1.0) {
+            break;
+        }
+
+        std::vector<carla::road::element::Waypoint> next_waypoints = _map->GetNext(current, 0.1);
+
+        if (next_waypoints.empty()) {
             std::cerr << "Error: No further waypoints found!" << std::endl;
             break;
         }
+
+        // Pick first option for simplicity (avoiding loops)
+        current = next_waypoints.front();
     }
 
+    // Ensure goal waypoint is included
+    path.push_back(goal);
     // Ensure the goal waypoint is included
-    path.push_back(goal_waypoint);  
+    // RCLCPP_INFO(this->get_logger(), "Path found with %ld waypoints.", path.size());
 
     visualization_msgs::msg::Marker waypoints_marker = get_waypoints_marker(path, {0.0f, 1.0f, 0.0f}, 0.2, 0.5);
 
@@ -80,7 +140,10 @@ void OpenDriveMapParser::path_planner() {
     auto loc_start = transform_opt_origin.location;
     origin_pose_msg.pose.position.x = loc_start.x;
     origin_pose_msg.pose.position.y = loc_start.y;
-    origin_pose_msg.pose.position.z = loc_start.z;
+    origin_pose_msg.pose.position.z = -loc_start.z;
+
+    RCLCPP_INFO(this->get_logger(), "Start Location: %f, %f, %f", loc_start.x, loc_start.y, loc_start.z);
+    RCLCPP_INFO(this->get_logger(), "Goal Location: %f, %f, %f", destination.x, destination.y, destination.z);
 
     origin_pose_msg.pose.orientation.x = 0.0;
     origin_pose_msg.pose.orientation.y = 0.0;
@@ -95,7 +158,7 @@ void OpenDriveMapParser::path_planner() {
     auto loc_end = transform_opt_destination.location;
     destination_pose_msg.pose.position.x = loc_end.x;
     destination_pose_msg.pose.position.y = loc_end.y;
-    destination_pose_msg.pose.position.z = loc_end.z;
+    destination_pose_msg.pose.position.z = -loc_end.z;
 
     destination_pose_msg.pose.orientation.x = 0.0;
     destination_pose_msg.pose.orientation.y = 0.0;
