@@ -1,0 +1,5 @@
+geometry_msgs/Vector3 origin
+geometry_msgs/Vector3 destination
+---
+# Path
+custom_interfaces/Vector2[] path

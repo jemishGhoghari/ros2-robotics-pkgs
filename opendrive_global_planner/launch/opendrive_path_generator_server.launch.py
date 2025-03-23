@@ -1,20 +1,23 @@
-# Description: Launch file for two cameras and rviz2
 from launch import LaunchDescription
 from launch_ros.actions import *
 from launch_ros.descriptions import ComposableNode
 from launch_ros.actions import ComposableNodeContainer
+from launch.substitutions import PathJoinSubstitution
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     """Generate launch description with multiple components."""
+    opendrive_map_content = PathJoinSubstitution([FindPackageShare('opendrive_global_planner'), 'maps', 'CARISSMA_rural.xml'])
 
-    opendrive_globa_planner_node = ComposableNode(
-        package='carla_opendrive_parser',
-        plugin='path_planner::OpenDriveMapParser',
+    opendrive_global_planner_node = ComposableNode(
+        package='opendrive_global_planner',
+        plugin='path_planner::OpenDriveGeneratorServer',
         namespace='',
-        name='opendrive_map_parser_node',
+        name='opendrive_path_generator_server',
         parameters=[
-            {"origin" : [-171.71, 122.36, -0.64]},
-            {"destination" : [20.84, 66.99, -0.41]}
+            {"map_content" : opendrive_map_content},
+            {"distance" : 1.0},
+            {"threshold" : 1.0},
         ]
     )
 
@@ -23,7 +26,7 @@ def generate_launch_description():
         namespace='',
         package='rclcpp_components',
         executable='component_container_mt',
-        composable_node_descriptions=[opendrive_globa_planner_node],
+        composable_node_descriptions=[opendrive_global_planner_node],
         arguments=['--ros-args', '--log-level', 'INFO'],
         output='screen'
     )
