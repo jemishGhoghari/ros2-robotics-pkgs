@@ -1,0 +1,10 @@
+[Unit]
+Description=rosbotxl-main-startup
+
+[Service]
+Type=oneshot
+Environment="ISAAC_ROS_DEV_DIR=%h/workspaces/master_project"
+ExecStart=%h/rosbotxl_main_startup.sh
+
+[Install]
+WantedBy=default.target
