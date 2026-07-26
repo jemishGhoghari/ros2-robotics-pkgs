@@ -1,2 +1,0 @@
-CONFIG_IMAGE_KEY=ros2_humble.jetson
-CONFIG_DOCKER_SEARCH_DIRS=$HOME/workspaces/isaac_ros-dev/src/ros2-robotics-pkgs/robotics_dev_docker/docker

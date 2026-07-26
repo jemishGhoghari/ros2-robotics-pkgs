@@ -1,9 +1,0 @@
-[Unit]
-Description=srd-jetson-startup
-
-[Service]
-Type=oneshot
-ExecStart=/usr/local/bin/srd_jetson_startup.sh
-
-[Install]
-WantedBy=default.target

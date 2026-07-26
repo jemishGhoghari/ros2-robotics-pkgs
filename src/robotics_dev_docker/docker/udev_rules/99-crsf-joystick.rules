@@ -1,1 +1,0 @@
-KERNEL=="event[0-11]*", SUBSYSTEM=="input", ATTRS{uniq}=="642C61DF38382B57", ACTION=="add", SYMLINK+="crsf-joystick", MODE="664"

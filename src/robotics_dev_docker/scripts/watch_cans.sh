@@ -1,1 +1,0 @@
-for i in 0 1; do ip -details link show can$i; done
