@@ -2,3 +2,28 @@
 	path = src/isaac_ros_common
 	url = https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git
 	branch = release-3.2
+[submodule "src/husarion_rosbotxl/rosbot_ros"]
+	path = src/husarion_rosbotxl/rosbot_ros
+	url = https://github.com/husarion/rosbot_ros.git
+	branch = humble
+[submodule "src/husarion_rosbotxl/dynamixel_hardware_interface"]
+	path = src/husarion_rosbotxl/dynamixel_hardware_interface
+	url = https://github.com/ROBOTIS-GIT/dynamixel_hardware_interface.git
+	branch = humble
+[submodule "src/husarion_rosbotxl/husarion_components_description"]
+	path = src/husarion_rosbotxl/husarion_components_description
+	url = https://github.com/husarion/husarion_components_description.git
+[submodule "src/husarion_rosbotxl/husarion_controllers"]
+	path = src/husarion_rosbotxl/husarion_controllers
+	url = https://github.com/husarion/husarion_controllers.git
+[submodule "src/husarion_rosbotxl/husarion_gz_worlds"]
+	path = src/husarion_rosbotxl/husarion_gz_worlds
+	url = https://github.com/husarion/husarion_gz_worlds.git
+[submodule "src/husarion_rosbotxl/micro-ROS-Agent"]
+	path = src/husarion_rosbotxl/micro-ROS-Agent
+	url = https://github.com/micro-ROS/micro-ROS-Agent.git
+	branch = humble
+[submodule "src/husarion_rosbotxl/open_manipulator_x"]
+	path = src/husarion_rosbotxl/open_manipulator_x
+	url = https://github.com/husarion/open_manipulator_x.git
+	branch = humble
