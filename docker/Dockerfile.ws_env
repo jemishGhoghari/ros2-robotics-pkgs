@@ -98,8 +98,6 @@ RUN --mount=type=cache,target=/var/cache/apt \
     ros-humble-dynamixel-sdk \
     ros-humble-dynamixel-interfaces \
     ros-humble-ros-gz \
-    gz-fortress \
-    libgz-fortress-dev \
     ros-humble-ros-gz-sim \
     ros-humble-ros-gz-bridge
 
