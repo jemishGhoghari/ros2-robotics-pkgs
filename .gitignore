@@ -30,12 +30,14 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+*.jpg
+*.png
 
 *.nbi
 *.nbc
 
 *.mcap
-*.zip
+
 
 # colcon
 /build
