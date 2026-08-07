@@ -56,8 +56,7 @@ def generate_launch_description():
                 [FindPackageShare("husarion_gz_worlds"), "launch", "gz_sim.launch.py"]
             )
         ),
-        launch_arguments={"gz_log_level": "1",
-                          "gz_world" : gz_world}.items(),
+        launch_arguments={"gz_log_level": "1"}.items(),
     )
 
     config_rosbot_gazebo_dir = PythonExpression(
