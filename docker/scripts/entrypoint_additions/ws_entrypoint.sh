@@ -9,6 +9,8 @@ source ${ISAAC_ROS_WS}/install/setup.bash
 export RCUTILS_COLORIZED_OUTPUT=1
 # export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # export CYCLONEDDS_URI=/cyclonedds.xml
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+export ROS_DOMAIN_ID=1
 
 # add robot model env variable
 export ROBOT_MODEL_NAME=rosbot_xl
